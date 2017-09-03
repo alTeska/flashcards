@@ -10,15 +10,6 @@
 '''
 from random import randint
 
-#def find(word, letter):
-#    index = 0
-#    while index < len(word):
-#        if word[index] == letter:
-#            return index
-#        index += 1
-#    else:
-#        return -1
-
 def random(tbl):
     return randint(0, len(tbl) - 1)
 
