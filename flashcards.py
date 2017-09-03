@@ -1,12 +1,15 @@
 '''word pairing German:English
 1) pop up or gui
-3) verbs, adrektives, noms
+2) verbs, adrektives, noms
     -> create choice first
-    a) within the class of verbs -> dat, akk, so on
-4) once guessed removed for a while
-    -> one table storage, removed to "guessed"
-5) point counter %
-7) backup the file, from wrong inputs -> swtich to database(?)
+    -> within the class of verbs -> dat, akk, so on
+3) once guessed removed -> should pop back? (appending needed or not)
+4) point counter %
+5) amount of turns to be chosen first
+
+verbs - many answers, dat/akk choice
+adjektive
+noms  - der/die/das, plural
 '''
 from random import randint
 
@@ -30,18 +33,19 @@ class Word:
 #    def Vtype(Vtype):
 #        self.type = Vtype
 
-DIC_file = open('germ_eng.txt' ,'r')
-DIC      = load_from_file(DIC_file)
+DIC     = load_from_file( open('germ_eng.txt', 'r') )
+guessed = []
+turns   = int(input( "Amount of turns:" ))
 
-for turn in range(3):
+for i in range(turns):
     guesses_left = 3
-    word = Word( DIC[random(DIC)] )
-
+    r = random(DIC)
+    word = Word( DIC[r] )
     while guesses_left > 0:
         answer = input(word.de + " English: to ")
         if( answer in word.en ):
             print('correct\n')
-            #DIC.remove(word)
+            guessed.append( DIC.pop(r) )
             break
         else:
             guesses_left -= 1
