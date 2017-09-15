@@ -2,14 +2,12 @@
 1) pop up or gui [PyQt]
 2) verbs, adrektives, noms
     -> create choice first
-    -> within the class of verbs -> dat, akk, so on
-3) once guessed removed -> should pop back? (appending needed or not)
+3) add a word by user
+
 4) point counter %
-5) add a word by user
+5) once guessed removed -> should pop back? (appending needed or not)
 6) mistake correction showing
-    -> compare letter by letter, not just equal and if small differences, then adjust
-7) suggestions
-    -> take answer, show first and last letter and _
+-> compare letter by letter, not just equal and if small differences, then adjust
 
 Groups:
     verbs - many answers, dat/akk choice - > Verb type: 1.Nom 2.Dat 3.Akk 4.Dat+Akk
@@ -24,15 +22,6 @@ Groups:
 #        self.de  = words[0]
 #        self.en  = words[2:]
 #        self.gen = words[1]
-
-#def find(word, letter): #not in us atm
-#    index = 0
-#    while index < len(word):
-#        if word[index] == letter:
-#            return index
-#        index += 1
-#    else:
-#        return -1
 
 from random import randint
 
@@ -53,6 +42,8 @@ def make_sugest(word, i, ans):
         ans[0]  = first_word[0]
     elif i == 1:
         ans[-1] = first_word[-1]
+    elif i > 2:
+        return ("*help limit reached*\n")
     else:
         r = randint(1, l-2)
         ans[r] = first_word[r]
@@ -69,9 +60,9 @@ DIC_nom = load_from_file( open('germ_noms.txt', 'r') )
 guessed = []
 
 #types   = int( input("\n1.verben\n2.nomen\npick: ") )
-types   = 1
 #turns   = int( input("Amount of turns: ") )
-turns   = 1
+types   = 1
+turns   = 2
 
 if (types == 1):
     dictionary = DIC
@@ -88,13 +79,16 @@ for i in range(turns):
     while guesses_left > 0:
         answer = input(word.de + " in English: ").lower()
         if ( answer in word.en ):
-            print('correct\n')
+            print('*correct*\n')
             guessed.append( DIC.pop(r) )
             break
         elif ( answer == "?" ):
             suggest = make_sugest(word.en, help_counter, suggest)
             help_counter += 1
             print('to '+''.join(suggest), '\n')
+        elif ( answer == "!" ):
+            print ( "*answer: " + word.de + '*\n' )
+            break
         else:
             guesses_left -= 1
-            print('wrong\n')
+            print('*wrong*\n')
