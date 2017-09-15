@@ -35,28 +35,22 @@ def load_from_file(inp):
         tbl.append(line)
     return tbl
 
-
-#to be simplified ?? def get_letter(i):
 def make_sugest(word, i, ans):
-    first_word = word[0]
-    l = len(first_word)
-    if   (i == 0):
-        ans = list(l*"*")
-        ans[0]  = first_word[0]
-    elif (i == 1):
-        ans[-1] = first_word[-1]
-    elif (i > 2 ):
-        return ("*help limit reached*\n")
-    else:
-        r = randint(1, l-2)
-        ans[r] = first_word[r]
+    l = len(word)
+    if not ans  : ans = list(l*"*")
+    if     i > 2: return "*help limit reached*\n"
+
+    if   (i == 0): r = 0
+    elif (i == 1): r =-1
+    else         : r = randint(1, l-2)
+    ans[r] = word[r]
     return ans
 
 class Word:
     def __init__(self, line):
         words = line.split()
-        self.de = words[0]
         self.en = words[1:]
+        self.de = words[0]
 
 #types   = int( input("\n1.verben\n2.nomen\npick: ") )
 #turns   = int( input("Amount of turns: ") )
@@ -74,7 +68,6 @@ elif (types == 2): dic = load_from_file( open('germ_noms.txt', 'r') )
 2. first try is one by one if identical, counter if over treshhol go for it
 3. missing letters (checking lenghts)
 '''
-
 #def mistake_check(word):
     #i = 0
     #while i < len(word):
@@ -99,7 +92,7 @@ for i in range(turns):
             print('*correct*\n','points:', points,'\n')
             break
         elif (answer == '?'):
-            suggest = make_sugest(word.en, helps, suggest)
+            suggest = make_sugest(word.en[0], helps, suggest)
             helps += 1
             print('to '+''.join(suggest), '\n')
         elif (answer == '!'):
