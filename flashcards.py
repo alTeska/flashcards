@@ -3,12 +3,10 @@
 2) verbs, adrektives, noms
     -> create choice first
 3) add a word by user
-
-4) switching the class so it uses dictionaries (already in use?)
-5) once guessed removed -> should pop back?
-6) mistake correction showing
--> compare letter by letter, not just equal and if small differences, then adjust
-7) __str__ method for the class
+4) once guessed removed -> should pop back?
+5) mistake correction showing -> 1. fuzzy string matching, 2. suggest corrections
+6) __str__ method for the class
+7) normalize the input
 
 Groups:
     verbs - many answers, dat/akk choice - > Verb type: 1.Nom 2.Dat 3.Akk 4.Dat+Akk
@@ -16,7 +14,6 @@ Groups:
     adjektive + special words
 '''
 #language = int( input( "1.German:English\n2.English:German\n3.Both\n" ) )
-
 #class Nom:
 #    def __init__(self, line):
 #        words = line.split()
@@ -24,6 +21,7 @@ Groups:
 #        self.en  = words[2:]
 #        self.gen = words[1]
 
+from fuzzywuzzy import fuzz
 from random import randint
 
 def random_pick(tbl):
@@ -34,6 +32,9 @@ def load_from_file(inp):
     for line in inp:
         tbl.append(line)
     return tbl
+
+def norm_word(word):
+    return word.strip().lower()
 
 def make_sugest(word, i, ans):
     l = len(word)
@@ -58,24 +59,10 @@ types   = 1
 turns   = 1
 points  = 0
 guessed = []
-guessi  = 0
+#guessi  = 0
 
 if   (types == 1): dic = load_from_file( open('germ_eng.txt' , 'r') )
 elif (types == 2): dic = load_from_file( open('germ_noms.txt', 'r') )
-
-''' conditions: no identical words
-1. go thorugh 1st and 2nd word to compare -> if not then check next letter
-2. first try is one by one if identical, counter if over treshhol go for it
-3. missing letters (checking lenghts)
-'''
-#def mistake_check(word):
-    #i = 0
-    #while i < len(word):
-    #    if word[i] == letter:
-    #        return i
-    #    i += 1
-    #else:
-    #    return -1
 
 for i in range(turns):
     suggest = []
@@ -85,16 +72,12 @@ for i in range(turns):
     word = Word(dic[r])
 
     while guesses > 0:
-        answer = input(word.de + " in English: ").lower()
+        answer = norm_word( input(word.de + " in English: ") )
         if   (answer in word.en):
             guessed.append( dic.pop(r) )
             points += 1
             print('*correct*\n','points:', points,'\n')
             break
-        elif (answer == '?'):
-            suggest = make_sugest(word.en[0], helps, suggest)
-            helps += 1
-            print('to '+''.join(suggest), '\n')
         elif (answer == '!'):
             print ("*answer: " + word.de + '*\n')
             break
@@ -102,6 +85,10 @@ for i in range(turns):
             points  -= 0.5
             print('*word changed*\n')
             break
+        elif (answer == '?'):
+            suggest = make_sugest(word.en[0], helps, suggest)
+            helps += 1
+            print('to '+''.join(suggest), '\n')
         else:
             guesses -= 1
             points  -= 1
