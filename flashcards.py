@@ -3,7 +3,7 @@
 2) verbs, adrektives, noms
     -> create choice first
 3) add a word by user
-4) once guessed removed -> should pop back?
+4) once guessed removed -> should pop back? #if i > guessi: dic.append( guessed.pop(0) )
 5) mistake correction showing -> 1. fuzzy string matching, 2. suggest corrections
 6) __str__ method for the class
 7) normalize the input
@@ -36,6 +36,13 @@ def load_from_file(inp):
 def norm_word(word):
     return word.strip().lower()
 
+def find_match(tbl, inp):
+    ratio, match_word = 0, ''
+    for word in tbl:
+        temp = fuzz.ratio(inp, word)
+        if temp > ratio: ratio, match_word = temp, word
+    return ratio, match_word
+
 def make_sugest(word, i, ans):
     l = len(word)
     if not ans  : ans = list(l*"*")
@@ -59,7 +66,6 @@ types   = 1
 turns   = 1
 points  = 0
 guessed = []
-#guessi  = 0
 
 if   (types == 1): dic = load_from_file( open('germ_eng.txt' , 'r') )
 elif (types == 2): dic = load_from_file( open('germ_noms.txt', 'r') )
@@ -73,27 +79,24 @@ for i in range(turns):
 
     while guesses > 0:
         answer = norm_word( input(word.de + " in English: ") )
-        if   (answer in word.en):
-            guessed.append( dic.pop(r) )
-            points += 1
-            print('*correct*\n','points:', points,'\n')
-            break
-        elif (answer == '!'):
+        if   (answer == '!'):
             print ("*answer: " + word.de + '*\n')
             break
         elif (answer == '>'):
-            points  -= 0.5
             print('*word changed*\n')
             break
         elif (answer == '?'):
             suggest = make_sugest(word.en[0], helps, suggest)
             helps += 1
             print('to '+''.join(suggest), '\n')
+
+        ratio, match_word = find_match(word.en, answer)
+        if ratio == 100:
+            guessed.append( dic.pop(r) )
+            points += 1
+            print('*correct*\n','points:', points,'\n')
+            break
         else:
             guesses -= 1
             points  -= 1
             print('*wrong*\n')
-
-    #different solution needed
-    #if i > guessi: dic.append( guessed.pop(0) )
-    #guessi=i
