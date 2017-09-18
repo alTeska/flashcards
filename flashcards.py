@@ -1,28 +1,19 @@
 '''word pairing German:English
 1) pop up or gui [PyQt]
-2) verbs, adrektives, noms
-    -> create choice first
+2) verbs, adrektives, noms #types = int( input("\n1.verben\n2.nomen\npick: ") )
 3) add a word by user
 4) once guessed removed -> should pop back? #if i > guessi: dic.append( guessed.pop(0) )
-5) mistake correction showing -> 1. fuzzy string matching, 2. suggest corrections
+5) mistake correction showing -> 1.fuzzy string matching, 2.additional requirement 3.show only after last try
 6) __str__ method for the class
-7) normalize the input
+7) Eng <-> Germ #language = int( input( "1.German:English\n2.English:German\n3.Both\n" ) )
 
 Groups:
     verbs - many answers, dat/akk choice - > Verb type: 1.Nom 2.Dat 3.Akk 4.Dat+Akk
     noms  - der/die/das, plural
     adjektive + special words
 '''
-#language = int( input( "1.German:English\n2.English:German\n3.Both\n" ) )
-#class Nom:
-#    def __init__(self, line):
-#        words = line.split()
-#        self.de  = words[0]
-#        self.en  = words[2:]
-#        self.gen = words[1]
-
 from fuzzywuzzy import fuzz
-from random import randint
+from random     import randint
 
 def random_pick(tbl):
     return randint(0, len(tbl) - 1)
@@ -60,10 +51,8 @@ class Word:
         self.en = words[1:]
         self.de = words[0]
 
-#types   = int( input("\n1.verben\n2.nomen\npick: ") )
-#turns   = int( input("Amount of turns: ") )
+turns   = 1 #int( input("Amount of turns: ") )
 types   = 1
-turns   = 1
 points  = 0
 guessed = []
 
@@ -79,6 +68,7 @@ for i in range(turns):
 
     while guesses > 0:
         answer = norm_word( input(word.de + " in English: ") )
+        #GUI options
         if   (answer == '!'):
             print ("*answer: " + word.de + '*\n')
             break
@@ -92,10 +82,12 @@ for i in range(turns):
 
         ratio, match_word = find_match(word.en, answer)
         if ratio == 100:
-            guessed.append( dic.pop(r) )
+            guessed.append(dic.pop(r))
             points += 1
             print('*correct*\n','points:', points,'\n')
             break
+        elif ratio >= 80: #after last round?, additional checks: lenght
+            print (match_word)
         else:
             guesses -= 1
             points  -= 1

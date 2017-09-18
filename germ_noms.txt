@@ -1,2 +1,2 @@
-Mutter die; mother
-Schwester die; sister
+die Mutter    mother
+die Schwester sister
