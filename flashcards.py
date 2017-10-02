@@ -34,6 +34,22 @@ def find_match(inp, ans):
             if temp > ratio: ratio, match_word = temp, word
     return ratio, match_word
 
+def check_ans(inp, ans, chances):
+    ratio, match_word = find_match(inp, ans)
+    if ratio == 100:
+        print ('*correct*\n')
+        return 0
+    elif ratio >= 90: #dev
+        print (match_word)
+    else:
+        print ('*wrong*\n')
+    return chances - 1
+
+def translate(transl, ans, chances, way):
+    while chances > 0:
+        inp     = norm_word( input(transl + " translate %s: " % way) )
+        chances = check_ans(inp, ans, chances)
+
 class Verb(object):
     chances = 3
     def __init__(self, line):
@@ -41,25 +57,13 @@ class Verb(object):
         self.de = words[0]
         self.en = words[1:]
 
-    def check_ans(self, inp, ans):
-        ratio, match_word = find_match(inp, ans)
-        if ratio == 100:
-            print('*correct*\n')
-            self.chances = 0
-        elif ratio >= 90: #dev
-            print (match_word)
-        else:
-            print('*wrong*\n')
-        self.chances -= 1
-
     def transl_round(self, way):
-        if   way == 0: transl, ans = self.de, self.en
+        if   way == 0: transl, ans = self.de   , self.en
         else         : transl, ans = self.en[0], self.de
-        while self.chances > 0:
-            inp = norm_word( input(transl + " translate %s: " % way) )
-            self.check_ans(inp, ans)
+        translate(transl, ans, self.chances, way)
 
-class Nom(Verb):
+class Nom(object):
+    chances = 3
     def __init__(self, line):
         words = line.split()
         self.art = words[0]
@@ -69,16 +73,13 @@ class Nom(Verb):
     def transl_round(self, way):
         if   way == 0: transl, ans = self.de   , self.en
         else         : transl, ans = self.en[0], (self.art + ' ' + self.de)
-        while self.chances > 0:
-            inp = norm_word( input(transl + " translate %s: " % way) )
-            print (inp, ans)
-            self.check_ans(inp, ans.lower())
+        translate(transl, ans, self.chances, way)
 
 turns   = 1 #int( input("Amount of turns: ") )
 types   = 1
 points  = 0
 guessed = []
-transl_dir = 1
+transl_dir = 0
 
 #if   (types == 1): dic = load_from_file( open('germ_eng.txt' , 'r') )
 #elif (types == 2): dic = load_from_file( open('germ_noms.txt', 'r') )
@@ -88,8 +89,7 @@ dic_nom = load_from_file( open('germ_noms.txt', 'r') )
 for i in range(turns):
     #verb
     rand_ver = random_pick(dic_ver)
-    verb = Verb( dic_ver[rand_ver] )
-
+    verb     = Verb( dic_ver[rand_ver] )
     verb.transl_round( transl_dir )
     guessed.append ( dic_ver.pop(rand_ver) )
 

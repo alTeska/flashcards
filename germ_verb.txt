@@ -1,6 +1,7 @@
 haben have
 antworten answer
 arbeiten work
+funktionieren function work
 beginnen begin start
 bedeuten	mean
 bekommen	get
