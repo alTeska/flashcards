@@ -13,9 +13,6 @@ def load_from_file(inp):
 def norm_word(word):
     return word.strip().lower()
 
-def norm_nom (word):
-    return word.strip()
-
 def make_sugest(word, i, ans):
     l = len(word)
     if not ans  : ans = list(l*"*")
@@ -56,10 +53,10 @@ class Verb(object):
         self.chances -= 1
 
     def transl_round(self, way):
-        if   way == 0: translate, ans = self.de, self.en
-        else         : translate, ans = self.en[0], self.de
+        if   way == 0: transl, ans = self.de, self.en
+        else         : transl, ans = self.en[0], self.de
         while self.chances > 0:
-            inp = norm_word( input(translate + " translate %s: " % way) )
+            inp = norm_word( input(transl + " translate %s: " % way) )
             self.check_ans(inp, ans)
 
 class Nom(Verb):
@@ -70,10 +67,10 @@ class Nom(Verb):
         self.en  = words[2:]
 
     def transl_round(self, way):
-        if   way == 0: translate, ans = self.de   , self.en
-        else         : translate, ans = self.en[0], (self.art + ' ' + self.de)
+        if   way == 0: transl, ans = self.de   , self.en
+        else         : transl, ans = self.en[0], (self.art + ' ' + self.de)
         while self.chances > 0:
-            inp = norm_word( input(translate + " translate %s: " % way) )
+            inp = norm_word( input(transl + " translate %s: " % way) )
             print (inp, ans)
             self.check_ans(inp, ans.lower())
 
@@ -90,12 +87,14 @@ dic_nom = load_from_file( open('germ_noms.txt', 'r') )
 
 for i in range(turns):
     #verb
-    rand = random_pick(dic)
-    word = Verb( dic[rand] )
-    word.transl_round( transl_dir )
-    guessed.append ( dic.pop(rand) )
+    rand_ver = random_pick(dic_ver)
+    verb = Verb( dic_ver[rand_ver] )
+
+    verb.transl_round( transl_dir )
+    guessed.append ( dic_ver.pop(rand_ver) )
 
     #nomen
     rand_nom = random_pick(dic_nom)
     nom      = Nom( dic_nom[rand_nom] )
     nom.transl_round( transl_dir )
+    dic_nom.pop(rand_nom)
