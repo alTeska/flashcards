@@ -1,41 +1,25 @@
-OLD
 Groups:
     verbs - many answers, dat/akk choice - > Verb type: 1.Nom 2.Dat 3.Akk 4.Dat+Akk
     adjektive + special words
     noms  - der/die/das, plural
 
-COMP version:
-word pairing German:English
-1) pop up or gui [PyQt]
-2) verbs, adrektives, noms #types = int( input("\n1.verben\n2.nomen\npick: ") )
-3) add a word by user
-4) once guessed removed -> should pop back? #if i > guessi: dic.append( guessed.pop(0) )
-5) mistake correction showing -> 1.fuzzy string matching, 2.additional requirement 3.show only after last try
+ATM TODO:
+1) functions check +  Eng<->Germ + bld interface
+2) objects usage check (class Word?) + adjectives + make_sugest(!!)
+3) guessed should come back with delay?
+4) score counter
+5) mistake correction showing -> 1.fuzzy.str, 2.additional requirement 3.show after last try -> print corrected version(at the end for now)
 6) __str__ method for the class
-7) Eng <-> Germ #language = int( input( "1.German:English\n2.English:German\n3.Both\n" ) )
+7) pop up or gui [PyQt]
+8) add a word by user
 
-Problems:
-1) universal for both types of words -> find_match and make_sugest to class?
-2) easy change from one language to the other
-3) universal functions
-4) class Word ?
-
-How it is supposed to work? *for verbs only
+How it is supposed to work?
 1. set up:
 -both ways with language
 -get input -> normalize
--player needs to have chances (count within class, counted down?)
--game breaks once guessed or out of chances
--
+-set:
+  lang direction
+  type of word
+  turns
 
-Just changes within the object?
-
-word pairing German:English
-0) functionality check, smaller functions +
-1) once guessed removed -> should pop back? #if i > guessi: dic.append( guessed.pop(0) ) +
-2) Eng <-> Germ #language = int( input( "1.German:English\n2.English:German\n3.Both\n" ) )  ++
-3) mistake correction showing -> 1.fuzzy string matching, 2.additional requirement 3.show only after last try
-4) smarter points
-5) add a word by user
-7) verbs, adrektives, noms #types = int( input("\n1.verben\n2.nomen\npick: ") )
-6) pop up or gui [PyQt]
+2.game breaks once guessed or out of chances

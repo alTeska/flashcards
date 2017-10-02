@@ -75,26 +75,23 @@ class Nom(object):
         else         : transl, ans = self.en[0], (self.art + ' ' + self.de)
         translate(transl, ans, self.chances, way)
 
-turns   = 1 #int( input("Amount of turns: ") )
-types   = 1
-points  = 0
-guessed = []
-transl_dir = 0
+def game_round(dic, Word, transl_dir):
+    rand = random_pick(dic)
+    word = Word( dic[rand] )
+    word.transl_round( transl_dir )
+    dic.pop( rand )
 
-#if   (types == 1): dic = load_from_file( open('germ_eng.txt' , 'r') )
-#elif (types == 2): dic = load_from_file( open('germ_noms.txt', 'r') )
+turns      = 1   #int( input("Amount of turns: ") )
+types      = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
+points     = 0
+transl_dir = 0   #int( input("1.German:English\n2.English:German\n3.Both\n") )
+guessed    = []  #guessed.append ( dic_ver.pop(rand_ver) )
+
 dic_ver = load_from_file( open('germ_verb.txt', 'r') )
 dic_nom = load_from_file( open('germ_noms.txt', 'r') )
 
-for i in range(turns):
-    #verb
-    rand_ver = random_pick(dic_ver)
-    verb     = Verb( dic_ver[rand_ver] )
-    verb.transl_round( transl_dir )
-    guessed.append ( dic_ver.pop(rand_ver) )
+if   (types == 0): dic, Word = dic_ver, Verb     #verb
+elif (types == 1): dic, Word = dic_nom, Nom      #nomen
 
-    #nomen
-    rand_nom = random_pick(dic_nom)
-    nom      = Nom( dic_nom[rand_nom] )
-    nom.transl_round( transl_dir )
-    dic_nom.pop(rand_nom)
+for i in range(turns):
+    game_round(dic, Word, transl_dir)
