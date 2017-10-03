@@ -81,7 +81,7 @@ def game_round(dic, Word, transl_dir):
     word.transl_round( transl_dir )
     dic.pop( rand )
 
-turns      = 1   #int( input("Amount of turns: ") )
+turns      = 1   #int( input("Amount of turns: ") )s
 types      = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
 points     = 0
 transl_dir = 0   #int( input("1.German:English\n2.English:German\n3.Both\n") )
@@ -94,4 +94,9 @@ if   (types == 0): dic, Word = dic_ver, Verb     #verb
 elif (types == 1): dic, Word = dic_nom, Nom      #nomen
 
 for i in range(turns):
+    #GUI options
+    #answer = norm_word( input(word.de + " in English: ") )
+    #if (answer == '?'):
+    #    suggest = make_sugest(word.en[0], helps, suggest)
+
     game_round(dic, Word, transl_dir)
