@@ -18,8 +18,4 @@ How it is supposed to work?
 -both ways with language
 -get input -> normalize
 -setup
-
 2.game breaks once guessed or out of chances
-
-
-getting the input hidden to deep into the functions, problematic
