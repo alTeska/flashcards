@@ -19,3 +19,8 @@ How it is supposed to work?
 -get input -> normalize
 -setup
 2.game breaks once guessed or out of chances
+
+1. die as a separated check
+2. die printed -> in the class add up with die and then send to print properly(print func may be needed)
+3. die checked separately
+4. words input in a different form, how to and how does it influence class structure
