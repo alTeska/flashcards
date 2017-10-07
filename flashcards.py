@@ -4,6 +4,15 @@ from random     import randint
 def random_pick(tbl):
     return randint(0, len(tbl) - 1)
 
+#def find(word, letter):
+#    index = 0
+#    while index < len(word):
+#        if word[index] == letter:
+#            return index
+#        index += 1
+#    else:
+#        return -1
+
 def load_from_file(inp):
     tbl = []
     for line in inp:
@@ -39,79 +48,69 @@ def wordPrint(word, trDir, types):
     if   (trDir == 0 and types == 1): return (word.art + word.tr)
     else                            : return (word.tr)
 
-class Verb(object):
+class Word(object):
     chances  = 3
     help_cnt = 0
     suggest = []
-    def __init__(self, line):
-        words = line.split()
-        self.de = [words[0]]
-        self.en = words[1:]
 
-    def pick_dir(self, way):
-        if   way == 0: self.tr, self.ans = self.de, self.en
-        else         : self.tr, self.ans = self.en, self.de
+    def pick_dir(self, trDir):
+        if   trDir == 0: self.tr, self.ans = self.de, self.en
+        else           : self.tr, self.ans = self.en, self.de
 
-    def check_ans(self, inp, way):
+    def check_ans(self, inp):
         ratio, match_word = find_match(inp, self.ans)
         if ratio == 100:
             print ('*correct*\n')
             self.chances = 0
         #elif ratio >= 90: #dev
-        #    print (match_word)
+            #    print (match_word)
         else:
             print ('*wrong*\n')
             self.chances -= 1
 
-class Nom(object):
-    chances  = 3
-    help_cnt = 0
-    suggest = []
+class Verb(Word):
+    def __init__(self, line):
+        words = line.split()
+        self.de = [words[0]]
+        self.en = words[1:]
+
+class Nom(Word):
     def __init__(self, line):
         words = line.split()
         self.art = [words[0]]
         self.de  = [words[1]]
         self.en  =  words[2:]
 
-    def pick_dir(self, way):
-        if   way == 0: self.tr, self.ans = self.de, self.en
-        else         : self.tr, self.ans = self.en, self.de
+    def check_art(self, art):
+        ratio, match_art = find_match(art, self.art)
+        if ratio == 100: print ('*correct article*')
+        else           : print ('*wrong article*')
 
-    def check_ans(self, inp, way):
-        if way == 1:
-            inpArt, inp = inp.split()
-            ratioArt    = find_match(inpArt, self.art)
-        ratio, match_word = find_match(inp, self.ans)
-        if ratio == 100:
-            print ('*correct*\n')
-            self.chances = 0
-        else:
-            print ('*wrong*\n')
-            self.chances -= 1
-        #print(ratio, ratioArt)
-
-def game_round(dic, Word, trDir):
-    rand = random_pick(dic)
+def game_round(dic, Word, trDir, types):
+    rand = random_pick( dic )
     word = Word( dic[rand] )
     word.pick_dir( trDir )
 
     while word.chances > 0:
-        wordPrint(word, trDir, types) #to string
+        print (wordPrint(word, trDir, types)) #to string
         inp = input( "translate %s: " % trPrint(trDir) )
 
         if (inp == '?'): #GUI option
             word.suggest = make_suggest(word.ans[0], word.help_cnt, word.suggest)
             word.help_cnt += 1
-            print(''.join(word.suggest), '\n')
+            print (''.join(word.suggest), '\n')
         else:
-            word.check_ans(inp, trDir)
+            if (trDir == 1 and types == 1):
+                art, inp = inp.split()
+                word.check_art(art)
+            word.check_ans(inp)
     dic.pop( rand )
+
 
 turns  = 1   #int( input("Amount of turns: ") )
 points = 0
-
 types  = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
-trDir  = 0   #int( input("1.German:English\n2.English:German\n3.Both\n") )
+trDir  = 1   #int( input("1.German:English\n2.English:German\n3.Both\n") )
 
 guessed = []  #guessed.append ( dic_ver.pop(rand_ver) )
 
@@ -121,4 +120,4 @@ if   (types == 0): dic, Word = dic_ver, Verb     #verb
 elif (types == 1): dic, Word = dic_nom, Nom      #nomen
 
 for i in range(turns):
-    game_round(dic, Word, trDir)
+    game_round(dic, Word, trDir, types)

@@ -4,8 +4,8 @@ Groups:
     noms  - der/die/das, plural
 
 ATM TODO:
-1) functions check +  Eng<->Germ + bld interface
-2) objects usage check (class Word?) + adjectives + make_sugest(!!)
+1) check the article separately
+2) words input in a different form, how does it influence class structure
 3) guessed should come back with delay?
 4) score counter
 5) mistake correction showing -> 1.fuzzy.str, 2.additional requirement 3.show after last try -> print corrected version(at the end for now)
@@ -19,8 +19,3 @@ How it is supposed to work?
 -get input -> normalize
 -setup
 2.game breaks once guessed or out of chances
-
-1. die as a separated check
-2. die printed -> in the class add up with die and then send to print properly(print func may be needed)
-3. die checked separately
-4. words input in a different form, how to and how does it influence class structure
