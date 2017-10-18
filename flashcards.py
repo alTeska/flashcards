@@ -32,7 +32,7 @@ def find_match(inp, ans):
 def make_suggest(ans, i, suggest):
     l = len(ans)
     if not suggest: suggest = list(l*"*")
-    if     i > 2  : return "*help limit reached*\n"
+    if     i > 2 : return "*help limit reached*\n"
 
     if   (i == 0): r = 0
     elif (i == 1): r =-1
@@ -40,17 +40,17 @@ def make_suggest(ans, i, suggest):
     suggest[r] = ans[r]
     return suggest
 
-def trPrint(trDir):
+def tr_print(trDir):
     if   (trDir == 0): return ('to EN')
     elif (trDir == 1): return ('to DE')
 
-def wordPrint(word, trDir, types):
+def word_print(word, trDir, types):
     if   (trDir == 0 and types == 1): return (word.art + word.tr)
     else                            : return (word.tr)
 
 class Word(object):
-    chances  = 3
     help_cnt = 0
+    chances = 3
     suggest = []
 
     def pick_dir(self, trDir):
@@ -92,8 +92,8 @@ def game_round(dic, Word, trDir, types):
     word.pick_dir( trDir )
 
     while word.chances > 0:
-        print (wordPrint(word, trDir, types)) #to string
-        inp = input( "translate %s: " % trPrint(trDir) )
+        print (word_print(word, trDir, types)) #to string
+        inp = input( "translate %s: " % tr_print(trDir) )
 
         if (inp == '?'): #GUI option
             word.suggest = make_suggest(word.ans[0], word.help_cnt, word.suggest)
@@ -107,10 +107,10 @@ def game_round(dic, Word, trDir, types):
     dic.pop( rand )
 
 
-turns  = 1   #int( input("Amount of turns: ") )
 points = 0
-types  = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
-trDir  = 1   #int( input("1.German:English\n2.English:German\n3.Both\n") )
+turns = 1   #int( input("Amount of turns: ") )
+types = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
+trDir = 1   #int( input("1.German:English\n2.English:German\n3.Both\n") )
 
 guessed = []  #guessed.append ( dic_ver.pop(rand_ver) )
 
