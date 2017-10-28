@@ -48,6 +48,9 @@ def word_print(word, trDir, types):
     if   (trDir == 0 and types == 1): return (word.art + word.tr)
     else                            : return (word.tr)
 
+def word_print(word, trDir, types):
+    return (word.tr[0])
+
 class Word(object):
     help_cnt = 0
     chances = 3
@@ -86,38 +89,38 @@ class Nom(Word):
         if ratio == 100: print ('*correct article*')
         else           : print ('*wrong article*')
 
-def game_round(dic, Word, trDir, types):
-    rand = random_pick( dic )
-    word = Word( dic[rand] )
-    word.pick_dir( trDir )
+#def game_round(dic, Word, trDir, types):
+#    rand = random_pick( dic )
+#    word = Word( dic[rand] )
+#    word.pick_dir( trDir )
+#
+#    while word.chances > 0:
+#        print (word_print(word, trDir, types)) #to string
+#        inp = input( "translate %s: " % tr_print(trDir) )
+#
+#        if (inp == '?'): #GUI option
+#            word.suggest = make_suggest(word.ans[0], word.help_cnt, #word.suggest)
+#            word.help_cnt += 1
+#            print (''.join(word.suggest), '\n')
+#        else:
+#            if (trDir == 1 and types == 1):
+#                art, inp = inp.split()
+#                word.check_art(art)
+#            word.check_ans(inp)
+#    dic.pop( rand )
 
-    while word.chances > 0:
-        print (word_print(word, trDir, types)) #to string
-        inp = input( "translate %s: " % tr_print(trDir) )
 
-        if (inp == '?'): #GUI option
-            word.suggest = make_suggest(word.ans[0], word.help_cnt, word.suggest)
-            word.help_cnt += 1
-            print (''.join(word.suggest), '\n')
-        else:
-            if (trDir == 1 and types == 1):
-                art, inp = inp.split()
-                word.check_art(art)
-            word.check_ans(inp)
-    dic.pop( rand )
-
-
-points = 0
-turns = 1   #int( input("Amount of turns: ") )
-types = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
-trDir = 1   #int( input("1.German:English\n2.English:German\n3.Both\n") )
-
-guessed = []  #guessed.append ( dic_ver.pop(rand_ver) )
-
-dic_ver = load_from_file( open('germ_verb.txt', 'r') )
-dic_nom = load_from_file( open('germ_noms.txt', 'r') )
-if   (types == 0): dic, Word = dic_ver, Verb     #verb
-elif (types == 1): dic, Word = dic_nom, Nom      #nomen
-
-for i in range(turns):
-    game_round(dic, Word, trDir, types)
+#points = 0
+#turns = 1   #int( input("Amount of turns: ") )
+#types = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
+#trDir = 1   #int( input("1.German:English\n2.English:German\n3.Both\n") )
+#
+#guessed = []  #guessed.append ( dic_ver.pop(rand_ver) )
+#
+#dic_ver = load_from_file( open('germ_verb.txt', 'r') )
+#dic_nom = load_from_file( open('germ_noms.txt', 'r') )
+#if   (types == 0): dic, Word = dic_ver, Verb     #verb
+#elif (types == 1): dic, Word = dic_nom, Nom      #nomen
+#
+#for i in range(turns):
+#    game_round(dic, Word, trDir, types)
