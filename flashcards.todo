@@ -1,0 +1,17 @@
+General:
+  ☐ noms -> article check
+  ☐ fixed word input
+  ☐ score
+  ☐ fuzzywuzzy use for mistakes correction; print correct
+  ☐ guessed words come back with delay
+  ☐ more words to be added
+
+GUI:
+  ☐ proper closing
+  ☐ automatic type in window needed
+  ☐ with enter 'ok' button
+  ☐ colors
+  ☐ indicating setup
+
+Clean-up:
+  ☐ Application class self. usage
