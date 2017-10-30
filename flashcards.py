@@ -1,9 +1,6 @@
 from fuzzywuzzy import fuzz
 from random     import randint
 
-def random_pick(tbl):
-    return randint(0, len(tbl) - 1)
-
 #def find(word, letter):
 #    index = 0
 #    while index < len(word):
@@ -12,6 +9,12 @@ def random_pick(tbl):
 #        index += 1
 #    else:
 #        return -1
+
+def change_state(x):
+    return False if x else True
+
+def random_pick(tbl):
+    return randint(0, len(tbl) - 1)
 
 def load_from_file(inp):
     tbl = []
@@ -63,12 +66,12 @@ class Word(object):
     def check_ans(self, inp):
         ratio, match_word = find_match(inp, self.ans)
         if ratio == 100:
-            print ('*correct*\n')
+            return '*correct*'
             self.chances = 0
         #elif ratio >= 90: #dev
             #    print (match_word)
         else:
-            print ('*wrong*\n')
+            return '*wrong*'
             self.chances -= 1
 
 class Verb(Word):
@@ -88,39 +91,3 @@ class Nom(Word):
         ratio, match_art = find_match(art, self.art)
         if ratio == 100: print ('*correct article*')
         else           : print ('*wrong article*')
-
-#def game_round(dic, Word, trDir, types):
-#    rand = random_pick( dic )
-#    word = Word( dic[rand] )
-#    word.pick_dir( trDir )
-#
-#    while word.chances > 0:
-#        print (word_print(word, trDir, types)) #to string
-#        inp = input( "translate %s: " % tr_print(trDir) )
-#
-#        if (inp == '?'): #GUI option
-#            word.suggest = make_suggest(word.ans[0], word.help_cnt, #word.suggest)
-#            word.help_cnt += 1
-#            print (''.join(word.suggest), '\n')
-#        else:
-#            if (trDir == 1 and types == 1):
-#                art, inp = inp.split()
-#                word.check_art(art)
-#            word.check_ans(inp)
-#    dic.pop( rand )
-
-
-#points = 0
-#turns = 1   #int( input("Amount of turns: ") )
-#types = 1   #int( input("\n1.verben\n2.nomen\npick: ") )
-#trDir = 1   #int( input("1.German:English\n2.English:German\n3.Both\n") )
-#
-#guessed = []  #guessed.append ( dic_ver.pop(rand_ver) )
-#
-#dic_ver = load_from_file( open('germ_verb.txt', 'r') )
-#dic_nom = load_from_file( open('germ_noms.txt', 'r') )
-#if   (types == 0): dic, Word = dic_ver, Verb     #verb
-#elif (types == 1): dic, Word = dic_nom, Nom      #nomen
-#
-#for i in range(turns):
-#    game_round(dic, Word, trDir, types)
